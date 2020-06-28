@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.myelf.dao.UserDao">
+
+    <resultMap id="BaseResultMap" type="club.myelf.entity.User" >
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="passwd" property="passwd" />
+        <result column="type" property="type" />
+        <result column="apikey" property="apikey" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `name`,
+        `passwd`,
+        `type`,
+        `apikey`
+    </sql>
+
+    <!-- 插入数据 -->
+    <insert id="insert" parameterType="club.myelf.entity.User">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != id'>
+                `id`,
+            </if>
+            <if test ='null != name'>
+                `name`,
+            </if>
+            <if test ='null != passwd'>
+                `passwd`,
+            </if>
+            <if test ='null != type'>
+                `type`,
+            </if>
+            <if test ='null != apikey'>
+                `apikey`
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != id'>
+                #{id},
+            </if>
+            <if test ='null != name'>
+                #{name},
+            </if>
+            <if test ='null != passwd'>
+                #{passwd},
+            </if>
+            <if test ='null != type'>
+                #{type},
+            </if>
+            <if test ='null != apikey'>
+                #{apikey}
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 批量插入数据 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO user ( <include refid="Base_Column_List" /> ) VALUES
+        <foreach collection="list" item="curr" index="index" separator=",">
+            (
+                #{curr.id},
+                #{curr.name},
+                #{curr.passwd},
+                #{curr.type},
+                #{curr.apikey}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="club.myelf.entity.User">
+        UPDATE user
+        <set>
+            <if test ='null != name'>`name` = #{name},</if>
+            <if test ='null != passwd'>`passwd` = #{passwd},</if>
+            <if test ='null != type'>`type` = #{type},</if>
+            <if test ='null != apikey'>`apikey` = #{apikey}</if>
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delete">
+        DELETE FROM user
+        WHERE `id` = #{key}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="batchDelete" parameterType = "java.util.List">
+        DELETE FROM user WHERE id IN
+        <foreach collection="list"  item="item" open="(" separator="," close=")"  >
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 主键查询 -->
+    <select id="selectByKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM user
+        <where>
+            <if test ='null != id'>
+                and `id` = #{id}
+            </if>
+            <if test ='null != name'>
+                and `name` = #{name}
+            </if>
+        </where>
+    </select>
+
+    <!-- 条件查询 -->
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM user
+        <where>
+            <if test ='null != id'>
+                and `id` = #{id}
+            </if>
+            <if test ='null != name'>
+                and `name` LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test ='null != type'>
+                and `type` = #{type}
+            </if>
+            <if test ='null != apikey'>
+                and `apikey` LIKE CONCAT('%',#{apikey},'%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 分页条件查询 -->
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM user
+        <where>
+            <if test ='null != user.id'>
+                and `id` = #{user.id}
+            </if>
+            <if test ='null != user.name'>
+                and `name` LIKE CONCAT('%',#{user.name},'%')
+            </if>
+            <if test ='null != user.type'>
+                and `type` = #{user.type}
+            </if>
+            <if test ='null != user.apikey'>
+                and `apikey` LIKE CONCAT('%',#{user.apikey},'%')
+            </if>
+        </where>
+        limit #{page,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <!-- 总量查询 -->
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(*) FROM user
+        <where>
+            <if test ='null != id'>
+                and `id` = #{id}
+            </if>
+            <if test ='null != name'>
+                and `name` = #{name}
+            </if>
+            <if test ='null != passwd'>
+                and `passwd` = #{passwd}
+            </if>
+            <if test ='null != type'>
+                and `type` = #{type}
+            </if>
+            <if test ='null != apikey'>
+                and `apikey` = #{apikey}
+            </if>
+        </where>
+    </select>
+</mapper>

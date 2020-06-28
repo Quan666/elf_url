@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="club.myelf.dao.UrlDao">
+
+    <resultMap id="BaseResultMap" type="club.myelf.entity.Url" >
+        <result column="id" property="id" />
+        <result column="url" property="url" />
+        <result column="short_url" property="shortUrl" />
+        <result column="MD5" property="MD5" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `url`,
+        `short_url`,
+        `MD5`
+    </sql>
+
+    <!-- 插入数据 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="club.myelf.entity.Url">
+        INSERT INTO url
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != id'>
+                `id`,
+            </if>
+            <if test ='null != url'>
+                `url`,
+            </if>
+            <if test ='null != shortUrl'>
+                `short_url`,
+            </if>
+            <if test ='null != MD5'>
+                `MD5`
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != id'>
+                #{id},
+            </if>
+            <if test ='null != url'>
+                #{url},
+            </if>
+            <if test ='null != shortUrl'>
+                #{shortUrl},
+            </if>
+            <if test ='null != MD5'>
+                #{MD5}
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 批量插入数据 -->
+    <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
+        INSERT INTO url ( <include refid="Base_Column_List" /> ) VALUES
+        <foreach collection="list" item="curr" index="index" separator=",">
+            (
+                #{curr.id},
+                #{curr.url},
+                #{curr.shortUrl},
+                #{curr.MD5}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="club.myelf.entity.Url">
+        UPDATE url
+        <set>
+            <if test ='null != url'>`url` = #{url},</if>
+            <if test ='null != shortUrl'>`short_url` = #{shortUrl},</if>
+            <if test ='null != MD5'>`MD5` = #{MD5}</if>
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delete">
+        DELETE FROM url
+        WHERE `id` = #{key}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="batchDelete" parameterType = "java.util.List">
+        DELETE FROM url WHERE id IN
+        <foreach collection="list"  item="item" open="(" separator="," close=")"  >
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 主键查询 -->
+    <select id="selectByKey" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM url
+        <where>
+            <if test ='null != id'>
+                and `id` = #{id}
+            </if>
+            <if test ='null != url'>
+                and `url` = #{url}
+            </if>
+            <if test ='null != shortUrl'>
+                and `short_url` = #{shortUrl}
+            </if>
+            <if test ='null != MD5'>
+                and `MD5` = #{MD5}
+            </if>
+        </where>
+    </select>
+
+    <!-- 条件查询 -->
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM url
+        <where>
+            <if test ='null != id'>
+                and `id` = #{id}
+            </if>
+            <if test ='null != url'>
+                and `url` LIKE CONCAT('%',#{url},'%')
+            </if>
+            <if test ='null != shortUrl'>
+                and `short_url` LIKE CONCAT('%',#{shortUrl},'%')
+            </if>
+            <if test ='null != MD5'>
+                and `MD5` = #{MD5}
+            </if>
+        </where>
+    </select>
+
+    <!-- 分页条件查询 -->
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM url
+        <where>
+            <if test ='null != url.id'>
+                and `id` = #{url.id}
+            </if>
+            <if test ='null != url.url'>
+                and `url` LIKE CONCAT('%',#{url.url},'%')
+            </if>
+            <if test ='null != url.shortUrl'>
+                and `short_url` LIKE CONCAT('%',#{url.shortUrl},'%')
+            </if>
+            <if test ='null != url.MD5'>
+                and `MD5` = #{url.MD5}
+            </if>
+        </where>
+        limit #{page,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <!-- 总量查询 -->
+    <select id="total" resultType="java.lang.Integer">
+        SELECT count(*) FROM url
+        <where>
+            <if test ='null != id'>
+                and `id` = #{id}
+            </if>
+            <if test ='null != url'>
+                and `url` LIKE CONCAT('%',#{url},'%')
+            </if>
+            <if test ='null != shortUrl'>
+                and `short_url` LIKE CONCAT('%',#{shortUrl},'%')
+            </if>
+            <if test ='null != MD5'>
+                and `MD5` = #{MD5}
+            </if>
+        </where>
+    </select>
+</mapper>
