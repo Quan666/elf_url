@@ -12,8 +12,6 @@ jobs:
       # 第一步：下载源码（ CI/CD拉取代码到自己的本地 ）
       - name: Checkout
         uses: actions/checkout@master
-      - name: Set env
-        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
 
       # 第二步：打包构建
       - uses: actions/checkout@v2
@@ -53,5 +51,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
           asset_path: target/elf_url-1.0.0-SNAPSHOT.jar # 要上传文件
-          asset_name: elf_url-${{ env.RELEASE_VERSION }}.jar # 上传后的文件名
+          asset_name: elf_url-$(echo ${GITHUB_REF:10}).jar # 上传后的文件名
           asset_content_type: application/x-tgz
