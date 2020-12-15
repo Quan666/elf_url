@@ -61,5 +61,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
           asset_path: src/main/resources/application.properties # 要上传文件
-          asset_name: elf_url-${{ github.ref }}.jar # 上传后的文件名
+          asset_name: application.properties # 上传后的文件名
           asset_content_type: application/x-tgz
