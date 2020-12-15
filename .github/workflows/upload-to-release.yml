@@ -50,6 +50,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: target/*.jar # 要上传文件
-          asset_name: elf_url.jar # 上传后的文件名
+          asset_path: target/elf_url-1.0.0-SNAPSHOT.jar # 要上传文件
+          asset_name: elf_url-${GITHUB_REF:10}.jar # 上传后的文件名
           asset_content_type: application/x-tgz
