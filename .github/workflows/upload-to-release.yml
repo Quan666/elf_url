@@ -44,12 +44,22 @@ jobs:
 
       # 第四步：上传构建结果到 Release（把打包的tgz上传到Release）
       - name: Upload Release Asset
-        id: upload-release-asset
+        id: upload-release-jar
         uses: actions/upload-release-asset@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
-          asset_path: target/elf_url-1.0.0-SNAPSHOT.jar src/main/resources/application.properties # 要上传文件
+          asset_path: target/elf_url-1.0.0-SNAPSHOT.jar # 要上传文件
           asset_name: elf_url-${{ github.ref }}.jar # 上传后的文件名
           asset_content_type: application/x-tgz
+      - name: Upload Release Asset
+          id: upload-release-config
+          uses: actions/upload-release-asset@master
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }} # 上传地址，通过创建Release获取到的
+            asset_path: src/main/resources/application.properties # 要上传文件
+            asset_name: elf_url-${{ github.ref }}.jar # 上传后的文件名
+            asset_content_type: application/x-tgz
