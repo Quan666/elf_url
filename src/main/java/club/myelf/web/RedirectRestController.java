@@ -1,5 +1,6 @@
 package club.myelf.web;
 
+import club.myelf.annotation.IsURL;
 import club.myelf.dao.OnereadDao;
 import club.myelf.dao.UrlDao;
 import club.myelf.entity.Oneread;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -21,6 +24,7 @@ public class RedirectRestController {
     OnereadService onereadService;
 
     //短链接跳转
+    @IsURL
     @RequestMapping(value = {"/s/{shortURL}"})
     public String RedirectRestURL(@PathVariable String shortURL){
         Url url = new Url();
@@ -32,12 +36,17 @@ public class RedirectRestController {
         }else {
             return "redirect:/404.html";
         }
+//        return "redirect:/";
     }
     //跳转到管理页面
     @RequestMapping(value = {"/admin"})
     public String RedirectRestAdmin(){
         return "redirect:/admin.html";
     }
+//    @RequestMapping(value = {"/"})
+//    public String RedirectRestIndex(){
+//        return "redirect:/index.html";
+//    }
 
 
 }
